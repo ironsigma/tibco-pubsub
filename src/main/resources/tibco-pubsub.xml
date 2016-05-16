@@ -1,0 +1,78 @@
+<configuration>
+  <servers>
+    <server id="prod-server">
+      <host>tibe08.federated.fds</host>
+      <port>7252</port>
+      <user>prtuser</user>
+      <password>prtuser</password>
+      <certificateAuthorityFile>./mcom.ca</certificateAuthorityFile>
+      <serverKeyFile>./server.key</serverKeyFile>
+      <clientKeyFile>./client.key</clientKeyFile>
+      <keyPassword>s3cre7</keyPassword>
+    </server>
+  </servers>
+  <producers>
+    <producer profile="at-prod">
+      <connection>
+        <server id="prod-server"/>
+        <user>prtuserrw</user>
+        <password>prtuserrw</password>
+        <queueName>M.CSS.PRT.PRODUCT.BRE.TAGGING.SUB.ERROR</queueName>
+      </connection>
+      <messageSource>/var/messages/inbound</messageSource>
+      <messageTarget>/var/messages/processed</messageTarget>
+      <filters>
+        <fileFilter>
+          <fileNameFilter>*.json</fileNameFilter>
+          <contentFilter>Application: OCMS-ORCH</contentFilter>
+          <contentRegExFilter>JMS-Date: \d+</contentRegExFilter>
+          <classFilter>com.macys.tibco.FileFilter</classFilter>
+        </fileFilter>
+      </filters>
+    </producer>
+  </producers>
+  <consumers>
+    <consumer profile="at-stress">
+      <connection>
+        <server id="prod-server"/>
+        <queueName>M.CSS.PRT.PRODUCT.BRE.TAGGING.SUB.ERROR</queueName>
+        <connectionCount>2</connectionCount>
+        <workerThreadCount>10</workerThreadCount>
+      </connection>
+      <messageStorage>/tmp/messages</messageStorage>
+      <defaultAction>save</defaultAction>
+      <rules>
+        <messageRule>
+          <description>Ignore null brand</description>
+          <matchText>Mesage has invalid brand</matchText>
+          <action>discard</action>
+        </messageRule>
+        <messageRule>
+          <description>Ignore invalid PID</description>
+          <matchTextRegEx>No info found for PID: \d+</matchTextRegEx>
+          <action>discard</action>
+        </messageRule>
+        <messageRule>
+          <description>Header match</description>
+          <matchHeader>JMS-Source: orch</matchHeader>
+          <action>discard</action>
+        </messageRule>
+        <messageRule>
+          <description>Header regex match</description>
+          <matchHeaderRegEx>JMS-Timestamp: 1233\d+</matchHeaderRegEx>
+          <action>discard</action>
+        </messageRule>
+        <messageRule>
+          <description>Custom filter</description>
+          <matchClass>com.macys.tibco.MessageFilter</matchClass>
+          <action>discard</action>
+        </messageRule>
+        <messageRule>
+          <description>Custom action</description>
+          <matchText>foo</matchText>
+          <actionClass>com.macys.tibco.EmailMessage</actionClass>
+        </messageRule>
+      </rules>
+    </consumer>
+  </consumers>
+</configuration>
