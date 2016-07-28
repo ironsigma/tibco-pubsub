@@ -1,0 +1,69 @@
+<configuration>
+	<servers>
+		<server id="localvm-server">
+			<host>tcp://192.168.56.102</host>
+			<port>7222</port>
+			<user>admin</user>
+			<password>admpass</password>
+		</server>
+		<server id="prod-server">
+			<host>ssl://tibe08.federated.fds</host>
+			<port>7252</port>
+			<user>admcsseap</user>
+			<password>admcsspass</password>
+			<certificateAuthorityFile>${certAuth}</certificateAuthorityFile>
+			<serverKeyFile>${serverKey}</serverKeyFile>
+			<clientKeyFile>${clientKey}</clientKeyFile>
+			<keyPassword>5ecr37</keyPassword>
+		</server>
+	</servers>
+	
+	<producers>
+		<producer profile="STRESS">
+			<description>Post to Auto-Tagging VM queue</description>
+			<connection>
+				<server id="localvm-server" />
+				<user>alt-user</user>
+				<password>alt-password</password>
+				<queueName>M.CSS.PRT.PRODUCT.BRE.TAGGING.SUB</queueName>
+			</connection>
+			<messageSource>${sourceDir}</messageSource>
+			<messageTarget>${targetDir}</messageTarget>
+			<filters>
+				<fileFilter>
+					<fileNameFilter>*.json</fileNameFilter>
+					<contentFilter>Application: OCMS-ORCH</contentFilter>
+					<contentRegExFilter>JMS-Data: 204857384293</contentRegExFilter>
+					<classFilter>com.hawkprime.tibco.config.FileFilter</classFilter>
+				</fileFilter>
+			</filters>
+		</producer>
+	</producers>
+
+	<consumers>
+		<consumer profile="SIT">
+			<description>Consume error messages from SIT</description>
+			<connection>
+				<server id="prod-server" />
+				<queueName>M.CSS.PRT.PRODUCT.BRE.TAGGING.ERROR</queueName>
+				<connectionCount>80</connectionCount>
+				<workerThreadCount>20</workerThreadCount>
+			</connection>
+			<messageStorage>${storageDir}</messageStorage>
+			<defaultAction>save</defaultAction>
+			<rules>
+				<messageRule>
+					<description>Discard PDS Errors</description>
+					<matchText>Product Data Service Error</matchText>
+					<action>discard</action>
+				</messageRule>
+				<messageRule>
+					<description>Discard BRE Errors</description>
+					<matchHeader>Destination: BRE</matchHeader>
+					<action>discard</action>
+				</messageRule>
+			</rules>
+		</consumer>
+	</consumers>
+
+</configuration>

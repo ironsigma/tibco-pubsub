@@ -3,6 +3,7 @@ package com.hawkprime.tibco.config;
 import lombok.Builder;
 import lombok.Data;
 
+import com.hawkprime.tibco.config.validation.MessageRuleValidator;
 import com.hawkprime.validation.annotations.ClassName;
 import com.hawkprime.validation.annotations.Matches;
 import com.hawkprime.validation.annotations.NotBlank;
@@ -13,7 +14,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @Data
 @Builder
-@ValidatorClass(com.hawkprime.tibco.validation.MessageRuleValidator.class)
+@ValidatorClass(MessageRuleValidator.class)
 @XStreamAlias("messageRule")
 public class MessageRule {
 

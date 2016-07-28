@@ -1,4 +1,6 @@
-package com.hawkprime.tibco.validation;
+package com.hawkprime.tibco.config.validation;
+
+import lombok.val;
 
 import com.hawkprime.tibco.config.FileFilter;
 import com.hawkprime.validation.ObjectValidator;
@@ -8,7 +10,7 @@ public class FileFilterValidator implements ObjectValidator {
 
 	@Override
 	public boolean validate(Object value, String fieldPath, Validator validator) {
-		FileFilter filter = (FileFilter) value;
+		val filter = (FileFilter) value;
 		if (filter.getFileNameFilter() == null
 				&& filter.getContentFilter() == null
 				&& filter.getContentRegExFilter() == null

@@ -1,4 +1,4 @@
-package com.hawkprime.tibco.xstream;
+package com.hawkprime.tibco.config.xstream;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
