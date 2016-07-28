@@ -1,4 +1,4 @@
-package com.hawkprime.tibco.xstream;
+package com.hawkprime.tibco.config.xstream;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,6 @@
-package com.hawkprime.tibco.validation;
+package com.hawkprime.tibco.config.validation;
+
+import lombok.val;
 
 import com.hawkprime.tibco.config.Server;
 import com.hawkprime.validation.ObjectValidator;
@@ -8,11 +10,13 @@ public class TiboHostValidation implements ObjectValidator {
 
 	@Override
 	public boolean validate(Object value, String fieldPath, Validator validator) {
-		Server server = (Server) value;
-		String host = server.getHost();
+		val server = (Server) value;
+		val host = server.getHost();
+		boolean valid = true;
 
 		if (host == null) {
-			return false;
+			validator.addError("Host cannot be empty");
+			valid = false;
 
 		} else if (host.startsWith("ssl://")) {
 			if (server.getCertificateAuthorityFile() == null
@@ -22,7 +26,7 @@ public class TiboHostValidation implements ObjectValidator {
 				validator.addError(String.format("Server \"%s\" with SSL host \"%s\" requires "
 						+ "certificate authority, server key, client key and key password",
 						server.getId(), server.getHost()));
-				return false;
+				valid = false;
 			}
 
 		} else if (host.startsWith("tcp://")) {
@@ -34,7 +38,8 @@ public class TiboHostValidation implements ObjectValidator {
 						+ "ignoring SSL configuration", server.getId(), server.getHost()));
 			}
 		}
-		return true;
+
+		return valid;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.hawkprime.tibco.config;
 import lombok.Builder;
 import lombok.Data;
 
+import com.hawkprime.tibco.config.validation.FileFilterValidator;
 import com.hawkprime.validation.annotations.ClassName;
 import com.hawkprime.validation.annotations.NotBlank;
 import com.hawkprime.validation.annotations.RegularExpression;
@@ -12,7 +13,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @Data
 @Builder
 @XStreamAlias("fileFilter")
-@ValidatorClass(com.hawkprime.tibco.validation.FileFilterValidator.class)
+@ValidatorClass(FileFilterValidator.class)
 public class FileFilter {
 	@NotBlank
 	private String fileNameFilter;

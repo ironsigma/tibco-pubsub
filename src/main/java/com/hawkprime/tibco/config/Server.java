@@ -3,7 +3,7 @@ package com.hawkprime.tibco.config;
 import lombok.Builder;
 import lombok.Data;
 
-import com.hawkprime.tibco.validation.TiboHostValidation;
+import com.hawkprime.tibco.config.validation.TiboHostValidation;
 import com.hawkprime.validation.annotations.InRange;
 import com.hawkprime.validation.annotations.Matches;
 import com.hawkprime.validation.annotations.NotBlank;
@@ -14,7 +14,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @Data
-@Builder
+@Builder(toBuilder=true)
 @XStreamAlias("server")
 @ValidatorClass(TiboHostValidation.class)
 public class Server {

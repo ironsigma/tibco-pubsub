@@ -1,4 +1,6 @@
-package com.hawkprime.tibco.validation;
+package com.hawkprime.tibco.config.validation;
+
+import lombok.val;
 
 import com.hawkprime.tibco.config.MessageRule;
 import com.hawkprime.validation.ObjectValidator;
@@ -8,7 +10,7 @@ public class MessageRuleValidator implements ObjectValidator {
 
 	@Override
 	public boolean validate(Object value, String fieldPath, Validator validator) {
-		MessageRule rule = (MessageRule) value;
+		val rule = (MessageRule) value;
 		boolean valid = true;
 		if (rule.getMatchText() == null
 				&& rule.getMatchTextRegEx() == null
