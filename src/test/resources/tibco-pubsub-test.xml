@@ -1,4 +1,10 @@
 <configuration>
+	<logger>
+		<fileName>/var/log/tibco-pubsub.log</fileName>
+		<maxFileSize>150MB</maxFileSize>
+		<maxNumFiles>8</maxNumFiles>
+		<level>WARN</level>
+	</logger>
 	<servers>
 		<server id="localvm-server">
 			<host>tcp://192.168.56.102</host>

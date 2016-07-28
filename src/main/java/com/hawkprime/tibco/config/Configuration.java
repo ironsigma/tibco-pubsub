@@ -45,6 +45,9 @@ public class Configuration {
 	@Singular
 	private List<Consumer> consumers;
 
+	@Required
+	private Logger logger;
+
 	public static Configuration load(InputStream stream) throws InvalidConfigurationException {
 		try {
 			val config = (Configuration) createXStream().fromXML(stream);

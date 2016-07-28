@@ -11,4 +11,8 @@ public class InvalidConfigurationException extends Exception {
 		super(message);
 	}
 
+	public boolean hasCause() {
+		return getCause() != null;
+	}
+
 }
