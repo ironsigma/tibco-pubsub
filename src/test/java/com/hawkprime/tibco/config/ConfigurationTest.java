@@ -71,6 +71,13 @@ public class ConfigurationTest {
 			.build();
 
 		Configuration config = Configuration.builder()
+			.logger(Logger.builder()
+				.fileName("/var/log/tibco-pubsub.log")
+				.maxNumFiles(3)
+				.maxFileSize("100MB")
+				.level("DEBUG")
+				.build())
+
 			.server(server.getId(), server)
 
 			.producer(Producer.builder()
@@ -147,6 +154,11 @@ public class ConfigurationTest {
 
 		val config = Configuration.load(readXmlTestConfig());
 		val servers = config.getServers();
+
+		assertThat(config.getLogger().getFileName(), is("/var/log/tibco-pubsub.log"));
+		assertThat(config.getLogger().getMaxFileSize(), is("150MB"));
+		assertThat(config.getLogger().getMaxNumFiles(), is(8));
+		assertThat(config.getLogger().getLevel(), is("WARN"));
 
 		assertThat(servers.size(), is(2));
 

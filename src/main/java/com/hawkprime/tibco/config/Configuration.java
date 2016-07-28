@@ -21,6 +21,7 @@ import com.hawkprime.validation.annotations.ValidatorClass;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.converters.ConversionException;
 
 @Data
@@ -44,6 +45,12 @@ public class Configuration {
 	@Optional
 	@Singular
 	private List<Consumer> consumers;
+
+	@Required
+	private Logger logger;
+
+	@XStreamOmitField
+	private String buildVersion;
 
 	public static Configuration load(InputStream stream) throws InvalidConfigurationException {
 		try {
