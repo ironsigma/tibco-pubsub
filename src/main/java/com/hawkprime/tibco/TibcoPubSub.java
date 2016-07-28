@@ -47,6 +47,7 @@ public final class TibcoPubSub {
 			}
 		});
 
+		log.info("Tibco Pub/Sub v{}", config.getBuildVersion());
 		log.debug("Effective configuration: \"{}\"\n{}", configFileName, config.toXml());
 
 		if (config.hasProducers()) {
@@ -129,6 +130,15 @@ public final class TibcoPubSub {
 	public void loadConfig() throws InvalidConfigurationException {
 		try {
 			config = Configuration.load(new FileInputStream(new File(configFileName)));
+
+			if (this.getClass().getPackage() != null) {
+				String version = this.getClass().getPackage().getImplementationVersion();
+				if (version == null) {
+					version = "local-dev";
+				}
+				config.setBuildVersion(version);
+			}
+
 		} catch (FileNotFoundException e) {
 			throw new InvalidConfigurationException(
 					String.format("Configuration file \"%s\" not found, use --config to specify fullpath",
@@ -143,7 +153,6 @@ public final class TibcoPubSub {
 
 	// CHECKSTYLE IGNORE UncommentedMain
 	public static void main(String[] commandLineArguments) {
-		log.info("Tibco Pub/Sub v3.0");
 		val app = new TibcoPubSub();
 
 		try {
